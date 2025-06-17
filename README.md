@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# University Routine Management System
+
+A comprehensive web application for managing university class routines, built with Next.js, TypeScript, and Prisma.
+
+## Features
+
+### Admin Authentication
+- Secure login/logout system
+- Password reset functionality
+- Role-based access control
+
+### Course Management
+- Add, edit, and delete courses
+- Course search and filtering
+- Bulk import via CSV/Excel
+
+### Teacher Management
+- Add, edit, and delete teachers
+- Department assignment
+- Teacher list with search functionality
+
+### Room Management
+- Add, edit, and delete rooms
+- Room availability tracking
+- Capacity management
+
+### Time Slot Management
+- Define time slots
+- Set duration and breaks
+- Configure maximum slots per day
+
+### Routine Assignment
+- Assign courses to teachers, rooms, and time slots
+- Automatic conflict detection
+- Department and semester-based organization
+
+### Live Routine Dashboard
+- Interactive weekly calendar view
+- Drag-and-drop class assignment
+- Color-coded schedule blocks
+- Advanced filtering options
+
+### Reports & Export
+- Generate reports by teacher, department, or room
+- Export routines in PDF and Excel formats
+- Printable view
+
+## Tech Stack
+
+- **Frontend**: Next.js 14, TypeScript, Tailwind CSS
+- **Backend**: Next.js API Routes
+- **Database**: PostgreSQL
+- **ORM**: Prisma
+- **Authentication**: NextAuth.js
+- **UI Components**: Headless UI, Heroicons
+- **Form Handling**: React Hook Form, Zod
+- **Date Handling**: date-fns
+- **Drag and Drop**: react-beautiful-dnd
+- **Table Management**: TanStack Table
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Set up your environment variables:
+   ```bash
+   cp .env.example .env
+   ```
+4. Set up your PostgreSQL database and update the DATABASE_URL in .env
+5. Run database migrations:
+   ```bash
+   npx prisma migrate dev
+   ```
+6. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Environment Variables
+
+Create a `.env` file with the following variables:
+
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/routine_management"
+NEXTAUTH_SECRET="your-secret-key"
+NEXTAUTH_URL="http://localhost:3000"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Contributing
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a new Pull Request
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## License
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the MIT License.

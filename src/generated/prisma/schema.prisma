@@ -1,0 +1,111 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  password  String
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Course {
+  id        String    @id @default(cuid())
+  name      String
+  code      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  routines  Routine[]
+}
+
+model Teacher {
+  id         String    @id @default(cuid())
+  name       String
+  initial    String    @unique
+  department String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  routines   Routine[]
+}
+
+model Room {
+  id          String    @id @default(cuid())
+  number      String    @unique
+  capacity    Int?
+  isAvailable Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  routines    Routine[]
+}
+
+model TimeSlot {
+  id        String    @id @default(cuid())
+  startTime DateTime
+  endTime   DateTime
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  routines  Routine[]
+}
+
+model Department {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  routines  Routine[]
+  semesters Semester[] // <-- Add this line
+}
+
+model Semester {
+  id           String     @id @default(cuid())
+  number       Int
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  routines     Routine[]
+
+  @@unique([number, departmentId])
+}
+
+model Routine {
+  id           String     @id @default(cuid())
+  course       Course     @relation(fields: [courseId], references: [id])
+  courseId     String
+  teacher      Teacher    @relation(fields: [teacherId], references: [id])
+  teacherId    String
+  room         Room       @relation(fields: [roomId], references: [id])
+  roomId       String
+  timeSlot     TimeSlot   @relation(fields: [timeSlotId], references: [id])
+  timeSlotId   String
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String
+  semester     Semester   @relation(fields: [semesterId], references: [id])
+  semesterId   String
+  dayOfWeek    Int // 0-6 for Sunday-Saturday
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([roomId, timeSlotId, dayOfWeek])
+  @@unique([teacherId, timeSlotId, dayOfWeek])
+}
+
+enum Role {
+  ADMIN
+  SUPER_ADMIN
+}

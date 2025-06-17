@@ -1,0 +1,22 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    restart: always
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: sabbir
+      POSTGRES_PASSWORD: 1857sabbir
+      POSTGRES_DB: routineManagement
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    
+    
+  

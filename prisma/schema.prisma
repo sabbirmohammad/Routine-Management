@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  password  String
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Course {
+  id        String    @id @default(cuid())
+  name      String
+  code      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  routines  Routine[]
+}
+
+model Teacher {
+  id         String    @id @default(cuid())
+  name       String
+  initial    String    @unique
+  department String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  routines   Routine[]
+}
+
+model Room {
+  id          String    @id @default(cuid())
+  number      String    @unique
+  capacity    Int?
+  isAvailable Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  routines    Routine[]
+}
+
+model TimeSlot {
+  id        String    @id @default(cuid())
+  startTime DateTime
+  endTime   DateTime
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  routines  Routine[]
+}
+
+model Department {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Batch {
+  id        String    @id @default(cuid())
+  number    Int       @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  sections  Section[]
+}
+
+model Section {
+  id        String    @id @default(cuid())
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  batchId   String
+  routines  Routine[]
+  batch     Batch     @relation(fields: [batchId], references: [id])
+
+  @@unique([name, batchId])
+}
+
+model Routine {
+  id         String   @id @default(cuid())
+  courseId   String
+  teacherId  String
+  roomId     String
+  timeSlotId String
+  dayOfWeek  Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  sectionId  String
+  course     Course   @relation(fields: [courseId], references: [id])
+  room       Room     @relation(fields: [roomId], references: [id])
+  section    Section  @relation(fields: [sectionId], references: [id])
+  teacher    Teacher  @relation(fields: [teacherId], references: [id])
+  timeSlot   TimeSlot @relation(fields: [timeSlotId], references: [id])
+
+  @@unique([roomId, timeSlotId, dayOfWeek])
+  @@unique([teacherId, timeSlotId, dayOfWeek])
+}
+
+model RoutineEntry {
+  id         String   @id @default(cuid())
+  courseId   String
+  teacherId  String
+  roomId     String
+  timeSlotId String
+  sectionId  String
+  dayOfWeek  Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  SUPER_ADMIN
+}
